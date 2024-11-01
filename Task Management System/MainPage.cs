@@ -54,7 +54,7 @@ namespace Task_Management_System
 
                     //Handling new updated time when loading data V1.1
 
-                    task.Status = StatusHandling((DateTime)task.DueDate,task.Status);
+                    task.Status = MethodHelper.StatusHandling((DateTime)task.DueDate,task.Status);
 
                     //Update API Invoked
                     string response = await NetworkAPI.UpdateTaskAPI(task.Id, task.TaskName, (DateTime)task.DueDate, task.Status);
@@ -78,7 +78,7 @@ namespace Task_Management_System
                 dataTasksView.Columns["Status"].ReadOnly = true;
 
                 //Color Chnage depending on the Status
-                ColorChange();
+                MethodHelper.ColorChange(dataTasksView);
 
                 //Disabling Columns sorting for event listener for the data grid select view
                 foreach (DataGridViewColumn column in dataTasksView.Columns)
@@ -133,7 +133,7 @@ namespace Task_Management_System
                     // Update the status in the DataGridView
                     dataTasksView.Rows[rowIndex].Cells["Status"].Value = newStatus;
 
-                    ColorChange();
+                    MethodHelper.ColorChange(dataTasksView);
 
                 }
             }
@@ -192,7 +192,7 @@ namespace Task_Management_System
                     dataTable.Rows.Add(taskListData.Id, taskListData.TaskName, taskListData.DueDate, taskListData.Status);
 
                     
-                    ColorChange();               
+                    MethodHelper.ColorChange(dataTasksView);               
                 }
             }
             catch (Exception ex)
@@ -246,7 +246,7 @@ namespace Task_Management_System
             {
                 // Handle validation for the status when updating the time V1.2
                 
-                status = StatusHandling(time, status);
+                status = MethodHelper.StatusHandling(time, status);
                 
                 //API Update Invoke
                 string response = await NetworkAPI.UpdateTaskAPI(id, taskName, time ,status);
@@ -256,7 +256,7 @@ namespace Task_Management_System
 
                 dataTasksView.Rows[selectedRowIndex].Cells["Status"].Value = status;
 
-                ColorChange();
+                MethodHelper.ColorChange(dataTasksView);
 
             }
             catch(Exception ex)
@@ -276,46 +276,11 @@ namespace Task_Management_System
 
             dataTasksView.DataSource = dataView;
 
-            ColorChange();
+            MethodHelper.ColorChange(dataTasksView);
 
             //Enabling
             dataTasksView.SelectionChanged += dataTasksView_SelectionChanged;
 
-        }
-
-        private string StatusHandling(DateTime time, string status)
-        {
-            DateTime currentTime = DateTime.Now;
-            
-
-            if (currentTime.Date <= time && status != "Completed")
-            {
-
-                return "Pending";
-                
-            }
-            else if (currentTime.Date > time && status != "Completed")
-            {
-                return "Overdue";
-                
-            }
-
-            return status;
-        }
-
-        private void ColorChange()
-        {
-            foreach (DataGridViewRow row in dataTasksView.Rows)
-            {
-                string checkStatus = Convert.ToString(row.Cells[3].Value);
-
-                switch (checkStatus)
-                {
-                    case "Overdue": row.Cells[3].Style.BackColor = Color.Red; break;
-                    case "Completed": row.Cells[3].Style.BackColor = Color.Green; break;
-                    case "Pending": row.Cells[3].Style.BackColor = Color.White; break;
-                }
-            }
         }
     }
 }
