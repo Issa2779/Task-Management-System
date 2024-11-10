@@ -10,10 +10,12 @@ using System.Linq;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Task_Management_System.Network;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace Task_Management_System
@@ -24,6 +26,7 @@ namespace Task_Management_System
         private List<TaskListData> dataObjects = new List<TaskListData>();
         private DataTable dataTable = new DataTable();
         private TaskListData taskListData = new TaskListData();
+        Random numberGenerator = new Random();
 
         public MainPage()
         {
@@ -34,7 +37,7 @@ namespace Task_Management_System
 
         private async void LoadTasksData()
         {
-
+            
             try
             {
                 string responseBody = await NetworkAPI.GetTasks();
@@ -47,6 +50,7 @@ namespace Task_Management_System
                 dataTable.Columns.Add("Due Date", typeof(DateTime));
                 dataTable.Columns.Add("Status", typeof(string));
                 dataTable.Columns.Add("Change Status", typeof(bool));
+                dataTable.Columns.Add("Priority", typeof(int));
 
 
                 foreach (var task in dataObjects)
@@ -64,7 +68,7 @@ namespace Task_Management_System
                     //CheckBox Validation
                     check = (task.Status == "Pending" || task.Status == "Overdue")? false : true;
                     
-                    dataTable.Rows.Add(task.Id, task.TaskName, task.DueDate, task.Status, check);
+                    dataTable.Rows.Add(task.Id, task.TaskName, task.DueDate, task.Status, check, numberGenerator.Next(-10,10));
 
                 }
 
@@ -76,6 +80,7 @@ namespace Task_Management_System
                 dataTasksView.Columns["Task Name"].ReadOnly = true;
                 dataTasksView.Columns["Due Date"].ReadOnly = true;
                 dataTasksView.Columns["Status"].ReadOnly = true;
+                dataTasksView.Columns["Priority"].ReadOnly = true;
 
                 //Color Chnage depending on the Status
                 MethodHelper.ColorChange(dataTasksView);
@@ -184,12 +189,12 @@ namespace Task_Management_System
                 else
                 {
                     string newData = await NetworkAPI.AddTask(taskBox.Text, time, "");
-
-
                     taskListData = JsonConvert.DeserializeObject<TaskListData>(newData);
 
+                    bool check = (taskListData.Status == "Pending" || taskListData.Status == "Overdue") ? false : true;
+
                     //Add new task to the view
-                    dataTable.Rows.Add(taskListData.Id, taskListData.TaskName, taskListData.DueDate, taskListData.Status);
+                    dataTable.Rows.Add(taskListData.Id, taskListData.TaskName, taskListData.DueDate, taskListData.Status, check ,numberGenerator.Next(-10,10));
 
                     
                     MethodHelper.ColorChange(dataTasksView);               
@@ -200,8 +205,6 @@ namespace Task_Management_System
 
                 MessageBox.Show("Connection Error!");
             }
-
-
         }
 
         private async void DeleteBtn_Click(object sender, EventArgs e)
@@ -277,10 +280,23 @@ namespace Task_Management_System
             dataTasksView.DataSource = dataView;
 
             MethodHelper.ColorChange(dataTasksView);
+            
 
             //Enabling
             dataTasksView.SelectionChanged += dataTasksView_SelectionChanged;
 
+        }
+
+        private void ThreadButton_Click(object sender, EventArgs e)
+        {
+            int firstPeriod = 1000;
+            int secondPeriod = 1500;
+            
+            Thread thread1 = new Thread(() => MethodHelper.CalculateThreading(dataTasksView, firstPeriod,"First Period",label8));
+            Thread thread2 = new Thread(() => MethodHelper.CalculateThreading(dataTasksView, secondPeriod, "Second Period",label8));
+
+            thread1.Start();
+            thread2.Start();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -47,6 +48,29 @@ namespace Task_Management_System
             }
         }
 
+        public static void CalculateThreading(DataGridView dataTasksView, int timer,string testThread,Label label)
+        {
 
+            int result = 0;
+
+            foreach(DataGridViewRow row in dataTasksView.Rows)
+            {
+
+                result = (int)row.Cells["Priority"].Value * -1;
+                
+                if (result < 0)
+                {
+                    row.Cells[5].Style.BackColor = Color.Red;
+                }
+                else if (result > 0)
+                {
+                    row.Cells[5].Style.BackColor = Color.Green;
+                }
+
+                label.Text = testThread.ToString();
+                Thread.Sleep(timer);
+
+            }
+        }
     }
 }
