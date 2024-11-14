@@ -60,6 +60,8 @@ namespace Task_Management_System
 
                     result = (int)row.Cells["Priority"].Value * -1;
 
+                    row.Cells["Priority"].Value = result;
+
                     if (result < 0)
                     {
                         row.Cells[5].Style.BackColor = Color.Red;
