@@ -60,16 +60,22 @@ namespace Task_Management_System
 
                     result = (int)row.Cells["Priority"].Value * -1;
 
-                    row.Cells["Priority"].Value = result;
+                    //Cross threading issue also happens to the dataGridView due to the UI Changes
+                    dataTasksView.Invoke((MethodInvoker)(() =>
+                    {
+                        row.Cells["Priority"].Value = result;
 
-                    if (result < 0)
-                    {
-                        row.Cells[5].Style.BackColor = Color.Red;
+                        if (result < 0)
+                        {
+                            row.Cells[5].Style.BackColor = Color.Red;
+                        }
+                        else if (result > 0)
+                        {
+                            row.Cells[5].Style.BackColor = Color.Green;
+                        }
                     }
-                    else if (result > 0)
-                    {
-                        row.Cells[5].Style.BackColor = Color.Green;
-                    }
+                    
+                    )); 
 
                     //I fixed the cross thread issue by changing the text in the main thread since the UI runs on the main thread
                     label.Invoke((MethodInvoker)(() => label.Text = testThread));
