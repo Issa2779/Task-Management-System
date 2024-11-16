@@ -31,7 +31,6 @@ namespace Task_Management_System
         public MainPage()
         {
             InitializeComponent();
-
             LoadTasksData();
         }
 
@@ -44,7 +43,7 @@ namespace Task_Management_System
 
                 dataObjects = JsonConvert.DeserializeObject<List<TaskListData>>(responseBody);
 
-
+                
                 dataTable.Columns.Add("ID", typeof(int));
                 dataTable.Columns.Add("Task Name", typeof(string));
                 dataTable.Columns.Add("Due Date", typeof(DateTime));
@@ -297,6 +296,21 @@ namespace Task_Management_System
 
             thread1.Start();
             thread2.Start();
+        }
+
+        private void RefreshTaskButton_Click(object sender, EventArgs e)
+        {
+
+            dataTasksView.SelectionChanged -= dataTasksView_SelectionChanged;
+            dataTable.Clear();
+            dataTable.Columns.Clear();
+            dataTasksView.Columns.Clear();
+            
+            dataTasksView.DataSource = dataTable;
+
+            LoadTasksData();
+
+            dataTasksView.SelectionChanged += dataTasksView_SelectionChanged;
         }
     }
 }

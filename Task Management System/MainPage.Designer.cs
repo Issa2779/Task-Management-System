@@ -51,6 +51,7 @@
             this.ThreadButton = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.SearchTextBox = new System.Windows.Forms.TextBox();
+            this.RefreshTaskButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataTasksView)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.Add.SuspendLayout();
@@ -88,6 +89,7 @@
             // 
             // Add
             // 
+            this.Add.Controls.Add(this.RefreshTaskButton);
             this.Add.Controls.Add(this.label7);
             this.Add.Controls.Add(this.DeleteBtn);
             this.Add.Controls.Add(this.dateTimePicker);
@@ -106,18 +108,18 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(393, 18);
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(589, 46);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(352, 24);
+            this.label7.Size = new System.Drawing.Size(173, 18);
             this.label7.TabIndex = 7;
-            this.label7.Text = "Select the Task that needs to be Deleted!";
+            this.label7.Text = "Select the Task to delete!";
             // 
             // DeleteBtn
             // 
-            this.DeleteBtn.Location = new System.Drawing.Point(467, 93);
+            this.DeleteBtn.Location = new System.Drawing.Point(600, 93);
             this.DeleteBtn.Name = "DeleteBtn";
-            this.DeleteBtn.Size = new System.Drawing.Size(200, 37);
+            this.DeleteBtn.Size = new System.Drawing.Size(145, 37);
             this.DeleteBtn.TabIndex = 6;
             this.DeleteBtn.Text = "Delete";
             this.DeleteBtn.UseVisualStyleBackColor = true;
@@ -290,6 +292,16 @@
             this.SearchTextBox.TabIndex = 8;
             this.SearchTextBox.TextChanged += new System.EventHandler(this.SearchTextBox_TextChanged);
             // 
+            // RefreshTaskButton
+            // 
+            this.RefreshTaskButton.Location = new System.Drawing.Point(363, 93);
+            this.RefreshTaskButton.Name = "RefreshTaskButton";
+            this.RefreshTaskButton.Size = new System.Drawing.Size(155, 37);
+            this.RefreshTaskButton.TabIndex = 8;
+            this.RefreshTaskButton.Text = "Refresh";
+            this.RefreshTaskButton.UseVisualStyleBackColor = true;
+            this.RefreshTaskButton.Click += new System.EventHandler(this.RefreshTaskButton_Click);
+            // 
             // MainPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -339,6 +351,7 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Button ThreadButton;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button RefreshTaskButton;
     }
 }
 
